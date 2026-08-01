@@ -205,10 +205,69 @@
   .review-unanswered{font-size:12px;color:var(--muted);font-style:italic;margin-top:2px;}
 
   footer{text-align:center;padding:26px 20px 40px;color:var(--muted);font-size:12.5px;}
+
+  /* ===== Persistent Home button (visible on every screen) ===== */
+  .home-fab{
+    position:fixed; top:14px; left:14px; z-index:200;
+    display:flex; align-items:center; gap:7px;
+    background:var(--paper); border:1.5px solid var(--line); border-radius:12px;
+    padding:9px 14px 9px 11px; box-shadow:var(--shadow); cursor:pointer;
+    color:var(--ink); font-weight:700; font-size:13px; font-family:inherit;
+  }
+  .home-fab svg{width:18px;height:18px;flex-shrink:0;}
+  .home-fab:hover{border-color:var(--gold); color:var(--maroon);}
+  .home-fab:active{transform:scale(.96);}
+  .home-fab .home-label{white-space:nowrap;}
+  body{padding-top:0;}
+
+  /* ===== Mobile layout tweaks ===== */
+  @media(max-width:600px){
+    .home-fab{top:10px; left:10px; padding:8px 10px; border-radius:10px;}
+    .home-fab .home-label{display:none;}
+    .letterhead-inner{padding:60px 16px 14px;}
+    .dept-lines .l1{font-size:16.5px;}
+    .dept-lines .l2{font-size:13.5px;}
+    .dept-lines .l3{font-size:11.5px;}
+    .seal{width:50px;height:50px;}
+    .stepper{padding:10px 10px;gap:3px;}
+    .step{font-size:11px;gap:5px;}
+    .step span:not(.num){display:none;}
+    .step.active span:not(.num){display:inline;}
+    .step-sep{width:8px;}
+    main{padding:22px 12px 60px;}
+    .welcome-card{padding:22px 16px;border-radius:14px;}
+    h1.title{font-size:20px;}
+    p.welcome-text{font-size:14px;line-height:1.8;}
+    .choose-heading{margin:30px 0 16px;}
+    .choose-heading h2{font-size:18px;}
+    .std-card{padding:20px 18px;}
+    .std-card h3{font-size:20px;}
+    .form-card{padding:22px 18px;border-radius:14px;}
+    .chwelcome{padding:16px 16px;}
+    .test-type-grid{gap:12px;}
+    .tt-card{padding:16px;}
+    .custom-panel{padding:16px;}
+    .ch-strip{padding:13px 15px;}
+    .ch-body{padding:13px 15px 15px;}
+    .quiz-head h2{font-size:16.5px;}
+    .q-card{padding:16px;border-radius:14px;}
+    .q-text{font-size:15.5px;}
+    .opt{padding:11px 12px;font-size:13.5px;}
+    .quiz-nav{flex-wrap:wrap;}
+    .btn-ghost,.btn-dark{padding:11px 16px;font-size:13.5px;flex:1;}
+    .result-card{padding:30px 18px;}
+    .review-q{padding:14px 15px;}
+    .subj-card{padding:15px 13px;}
+    .subj-name{font-size:14px;}
+  }
 </style>
 </head>
 <body>
 
+<button class="home-fab" onclick="goHome()" title="முகப்புப் பக்கம்">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+  <span class="home-label">முகப்பு</span>
+</button>
 <header class="letterhead">
   <div class="letterhead-inner">
     <svg class="seal" viewBox="0 0 100 100" fill="none">
@@ -381,6 +440,9 @@
 
   <!-- SCREEN 5: QUIZ -->
   <section class="screen" id="screen-quiz">
+    <div class="back-row">
+      <button class="back-btn" onclick="changeChapter()">&larr; இயலை மாற்ற · Change Chapter</button>
+    </div>
     <div class="quiz-head">
       <div>
         <h2 id="quiz-subject-title"></h2>
@@ -725,11 +787,39 @@ const MATH_EN_GFORM_CHAPTERS = [
   { name:'11. Probability Distributions', url:'https://forms.gle/94EsAHr6uFvru15a9' },
   { name:'12. Discrete Mathematics', url:'https://forms.gle/hPJ9iLU7dePHSVaD7' }
 ];
+const PHY_TA_GFORM_CHAPTERS = [
+  { name:'1.நிலைமின்னியல்', url:'https://forms.gle/qG1DneYc8o7npUrZ6' },
+  { name:'2.மின்னோட்டவியல்', url:'https://forms.gle/enLHPFvocuJqKRyn6' },
+  { name:'3.காந்தவியல் மற்றும் மின்னோட்டத்தின் காந்த விளைவுகள்', url:'https://forms.gle/psrbWnpAFFCraTWJ7' },
+  { name:'4. மின்காந்தத்தூண்டலும் மாறுதிசை மின்னோட்டமும்', url:'https://forms.gle/4aM7YF8FSihdujKR8' },
+  { name:'5. மின்காந்த அலைகள்', url:'https://forms.gle/9Nmt9JBcjV3EKju26' },
+  { name:'6.கதிர் ஒளியியல்', url:'https://forms.gle/u7vniYNtLncethHP8' },
+  { name:'7.அலை ஒளியியல்', url:'https://forms.gle/RLMWDams3CBEKfwQ6' },
+  { name:'8.கதிர்வீச்சு மற்றும் பருப்பொருளின் இருமைப்பண்பு', url:'https://forms.gle/qkHooa4nXnqB6k3X7' },
+  { name:'9.அணு மற்றும் அணுக்கரு இயற்பியல்', url:'https://forms.gle/rKnsWtzFkTT2Mukb6' },
+  { name:'10.எலக்ட்ரானியல் மற்றும் தகவல்  தொடர்பு அமைப்புகள்', url:'https://forms.gle/na1ustGiXPGcCwJRA' },
+  { name:'11.இயற்பியலின் அண்மைக்கால வளர்ச்சிகள்', url:'https://forms.gle/1SvqqQYAopW3ovHV8' }
+];
+const PHY_EN_GFORM_CHAPTERS = [
+  { name:'1.Electrostatics', url:'https://forms.gle/ihj2dAD7t7VVxHhX8' },
+  { name:'2.Current Electricity', url:'https://forms.gle/wvckTpDUPKag4yA78' },
+  { name:'3.Magnetism And Magnetic Effects Of Electric Current', url:'https://forms.gle/sbugedwjHYGxTT6d7' },
+  { name:'4.Electromagnetic Induction And Alternating Current', url:'https://forms.gle/efTSzUb66twYocph9' },
+  { name:'5.Electromagnetic Waves', url:'https://forms.gle/tCshgqedmv8f9o5B7' },
+  { name:'6.Ray Optics', url:'https://forms.gle/TXKw9KmkbUBwouXb9' },
+  { name:'7.Wave Optics', url:'https://forms.gle/LSNT7ZJcFEziVxXBA' },
+  { name:'8.Dual Nature Of Radiation And Matter', url:'https://forms.gle/QtBQFF3fWvdRuALL7' },
+  { name:'9.Atomic And Nuclear Physics', url:'https://forms.gle/CwoCK9J4mr6QxT6Z8' },
+  { name:'10.Electronics And Communication', url:'https://forms.gle/vkWrY2MwAicyV2ct7' },
+  { name:'11.Recent Development In Physics', url:'https://forms.gle/EDZ61wPJqcmhWvJE8' }
+];
 const GFORM_SUBJECTS = {
   chem_ta: { lang:'ta', chapters: CHEM_TA_GFORM_CHAPTERS },
   chem_en: { lang:'en', chapters: CHEM_EN_GFORM_CHAPTERS },
   math_ta: { lang:'ta', chapters: MATH_TA_GFORM_CHAPTERS },
-  math_en: { lang:'en', chapters: MATH_EN_GFORM_CHAPTERS }
+  math_en: { lang:'en', chapters: MATH_EN_GFORM_CHAPTERS },
+  phy_ta: { lang:'ta', chapters: PHY_TA_GFORM_CHAPTERS },
+  phy_en: { lang:'en', chapters: PHY_EN_GFORM_CHAPTERS }
 };
 function isGformSubject(){ return !!(state.subject && GFORM_SUBJECTS[state.subject.id]); }
 function isEnGformSubject(){ return !!(state.subject && GFORM_SUBJECTS[state.subject.id] && GFORM_SUBJECTS[state.subject.id].lang === 'en'); }
@@ -781,6 +871,10 @@ function selectSubject(s){
   showScreen('screen-form',3);
 }
 
+function changeChapter(){
+  state.qIndex = 0; state.answers = []; state.questions = []; state.testType = '';
+  showScreen('screen-chapters',4);
+}
 function goChapters(){
   const name = document.getElementById('inp-name').value.trim();
   const school = document.getElementById('inp-school').value.trim();
@@ -823,8 +917,7 @@ function goChapters(){
   document.getElementById('ch-welcome-sub').textContent = state.subject.name + ' (' + state.subject.sub + ') · ' + T('chooseTestType');
   document.getElementById('ch-stats').innerHTML =
     '<span class="stat-pill">' + bank.chapters.length + ' ' + T('chaptersLabel') + '</span>' +
-    '<span class="stat-pill">' + totalQ + ' ' + (bank.real? T('realQuestions'):T('sampleQuestions')) + '</span>' +
-    (bank.real? '<span class="stat-pill">Source: '+bank.source+'</span>' : '');
+    '<span class="stat-pill">' + totalQ + ' ' + (bank.real? T('realQuestions'):T('sampleQuestions')) + '</span>';
 
   document.getElementById('ch-realnotice').innerHTML = bank.real ? '' :
     '<div class="notice">' + T('realNoticeHtml') + '</div>';
